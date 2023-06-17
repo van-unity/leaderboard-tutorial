@@ -44,6 +44,7 @@ public class LeaderboardDemo : MonoBehaviour {
         }
 
         var score = Convert.ToDouble(scoreInputField.text);
+        scoreInputField.text = string.Empty;
         try {
             await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, score);
             messageText.text = "Score submitted!";
