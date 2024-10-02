@@ -6,7 +6,8 @@ using Unity.Services.Leaderboards;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LeaderboardDemo : MonoBehaviour {
+public class LeaderboardDemo : MonoBehaviour
+{
     public string leaderboardId = "test-leaderboard";
     public TextMeshProUGUI messageText;
     public LeaderboardScoreView scoreViewPrefab;
@@ -15,11 +16,13 @@ public class LeaderboardDemo : MonoBehaviour {
     public Button loadScoresButton;
     public Transform scoresContainer;
 
-    private async void Awake() {
+    private async void Awake()
+    {
         await UnityServices.InitializeAsync();
     }
 
-    private async void Start() {
+    private async void Start()
+    {
         AuthenticationService.Instance.SignedIn += OnSignedIn;
         AuthenticationService.Instance.SignInFailed += OnSignInFailed;
 
@@ -30,40 +33,50 @@ public class LeaderboardDemo : MonoBehaviour {
         loadScoresButton.onClick.AddListener(LoadScoresAsync);
     }
 
-    private void OnSignedIn() {
+    private void OnSignedIn()
+    {
         messageText.text = $"Signed in as: {AuthenticationService.Instance.PlayerId}";
     }
 
-    private void OnSignInFailed(RequestFailedException exception) {
+    private void OnSignInFailed(RequestFailedException exception)
+    {
         messageText.text = $"Sign in failed with exception: {exception}";
     }
 
-    private async void SubmitScoreAsync() {
-        if (string.IsNullOrEmpty(scoreInputField.text)) {
+    private async void SubmitScoreAsync()
+    {
+        if (string.IsNullOrEmpty(scoreInputField.text))
+        {
             return;
         }
 
         var score = Convert.ToDouble(scoreInputField.text);
         scoreInputField.text = string.Empty;
-        try {
+        try
+        {
             await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, score);
             messageText.text = "Score submitted!";
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             messageText.text = $"Failed to submit score: {e}";
             throw;
         }
     }
 
-    private async void LoadScoresAsync() {
-        try {
+    private async void LoadScoresAsync()
+    {
+        try
+        {
             var scoresResponse = await LeaderboardsService.Instance.GetScoresAsync(leaderboardId);
             var childCount = scoresContainer.childCount;
-            for (int i = 0; i < childCount; i++) {
+            for (int i = 0; i < childCount; i++)
+            {
                 Destroy(scoresContainer.GetChild(i).gameObject);
             }
 
-            foreach (var leaderboardEntry in scoresResponse.Results) {
+            foreach (var leaderboardEntry in scoresResponse.Results)
+            {
                 var scoreView = Instantiate(scoreViewPrefab, scoresContainer);
                 scoreView.Initialize(leaderboardEntry.Rank.ToString(), leaderboardEntry.PlayerName,
                     leaderboardEntry.Score.ToString());
@@ -71,13 +84,15 @@ public class LeaderboardDemo : MonoBehaviour {
 
             messageText.text = "Scores fetched!";
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             messageText.text = $"Failed to fetch scores: {e}";
             throw;
         }
     }
 
-    private void OnDestroy() {
+    private void OnDestroy()
+    {
         AuthenticationService.Instance.SignedIn -= OnSignedIn;
         AuthenticationService.Instance.SignInFailed -= OnSignInFailed;
     }
