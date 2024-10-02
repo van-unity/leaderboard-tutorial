@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace TimeBasedLeaderboard {
-    public class TimeBasedLeaderboard : MonoBehaviour {
+    public class TimeBasedLeaderboardController : MonoBehaviour {
         [SerializeField] private string _leaderboardID;
         [SerializeField] private Toggle _allTimeToggle;
         [SerializeField] private Toggle _dailyToggle;

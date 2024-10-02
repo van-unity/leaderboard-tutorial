@@ -6,6 +6,8 @@ using Unity.Services.Leaderboards.Models;
 
 namespace TimeBasedLeaderboard {
     public class CustomLeaderboardEntry {
+        public const string DATE_KEY = "date";
+        
         public string PlayerID { get; }
         public string PlayerName { get; }
         public int Rank { get; }
@@ -27,7 +29,7 @@ namespace TimeBasedLeaderboard {
                 try {
                     var metadata = JsonConvert.DeserializeObject<Dictionary<string, string>>(leaderboardEntry.Metadata);
 
-                    if (metadata.TryGetValue("date", out var dateString)) {
+                    if (metadata.TryGetValue(DATE_KEY, out var dateString)) {
                         submitTime = DateTime.Parse(dateString, null, DateTimeStyles.RoundtripKind);
                     }
                 }

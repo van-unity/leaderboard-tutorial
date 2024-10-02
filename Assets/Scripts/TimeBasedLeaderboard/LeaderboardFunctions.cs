@@ -7,7 +7,7 @@ using Unity.Services.Leaderboards;
 namespace TimeBasedLeaderboard {
     public static class LeaderboardFunctions {
         public static object GenerateMetadata() => new Dictionary<string, string> {
-            { "date", DateTime.UtcNow.ToString("o") }
+            { CustomLeaderboardEntry.DATE_KEY, DateTime.UtcNow.ToString("o") }
         };
 
         public static async Task<Result<CustomLeaderboardEntry>> SubmitScoreAsync(string leaderboardID, double score,
@@ -21,7 +21,7 @@ namespace TimeBasedLeaderboard {
                 return Result<CustomLeaderboardEntry>.Success(CustomLeaderboardEntry.FromUnityLeaderboardEntry(result));
             }
             catch (Exception e) {
-                return Result<CustomLeaderboardEntry>.Failure(e.Message ?? string.Empty);
+                return Result<CustomLeaderboardEntry>.Failure(e.Message ?? "Failed to submit score.");
             }
         }
 
@@ -37,7 +37,7 @@ namespace TimeBasedLeaderboard {
                 );
             }
             catch (Exception exception) {
-                return Result<IEnumerable<CustomLeaderboardEntry>>.Failure(exception.Message ?? string.Empty);
+                return Result<IEnumerable<CustomLeaderboardEntry>>.Failure(exception.Message ?? "Failed to fetch entries.");
             }
         }
 
